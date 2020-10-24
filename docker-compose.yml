@@ -1,0 +1,47 @@
+version: '3'
+services:
+  webapp:
+    build: .
+    container_name: spnegoappcontainer
+    depends_on:
+      - mariadb
+    ports:
+      - "1080:80"
+      - "443:443"
+      - "9000:9000"
+    volumes:
+      - //C/workspaces/php/my_projects/php5-spnego:/var/www/html/webapp
+    tty: true
+    environment:
+      PROJECT_VNAME: "local.webapp"
+      PROJECT_WWW: "/var/www/html/webapp"
+      FUEL_ENV: "local"
+      XDEBUG_CONFIG: "remote_host=host.docker.internal"
+      PHP_IDE_CONFIG: "serverName=docker-webapp"
+      PHP_XDEBUG_ENABLED: 1
+      PHP_EXTENSION_XDEBUG: 1
+
+  mariadb:
+    image: 'bitnami/mariadb:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "13306:3306"
+      - "13307:3307"
+    volumes:
+      - mariadb_data:/bitnami
+  phpmyadmin:
+    image: bitnami/phpmyadmin:latest
+    depends_on:
+      - mariadb
+    ports:
+      - '2080:80'
+      - '2443:443'
+    volumes:
+      - phpmyadmin_data:/bitnami
+
+volumes:
+  mariadb_data:
+    driver: local
+  phpmyadmin_data:
+    driver: local

@@ -1,0 +1,8 @@
+postfix postfix/mailname string localhost
+postfix postfix/main_mailer_type string 'Docker Postfix'
+
+echo debconf debconf/frontend select Noninteractive;
+echo mysql-community-server mysql-community-server/data-dir select '';
+echo mysql-community-server mysql-community-server/root-pass password 'root';
+echo mysql-community-server mysql-community-server/re-root-pass password 'root';
+echo mysql-community-server mysql-community-server/remove-test-db select true;
